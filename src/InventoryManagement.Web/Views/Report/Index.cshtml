@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Reports & Analytics";
+    var cs = (string)ViewBag.CurrencySymbol;
+    var inventoryValue = (decimal)ViewBag.InventoryValue;
+    var topSelling = (List<(Product product, int totalSold)>)ViewBag.TopSelling;
+    var monthlyRevenue = (List<(string month, decimal revenue)>)ViewBag.MonthlyRevenue;
+    var categoryDist = (List<(Category category, int productCount, decimal value)>)ViewBag.CategoryDistribution;
+    var profitSummary = ((decimal totalSales, decimal totalPurchases, decimal profit))ViewBag.ProfitSummary;
+    var lowStock = (List<Inventory>)ViewBag.LowStock;
+}
+
+<div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon green">💰</div><div class="stat-info"><h4>Inventory Value</h4><div class="stat-value">@cs@inventoryValue.ToString("N0")</div></div></div>
+    <div class="stat-card"><div class="stat-icon cyan">💵</div><div class="stat-info"><h4>Total Sales</h4><div class="stat-value">@cs@profitSummary.totalSales.ToString("N0")</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">🛒</div><div class="stat-info"><h4>Total Purchases</h4><div class="stat-value">@cs@profitSummary.totalPurchases.ToString("N0")</div></div></div>
+    <div class="stat-card"><div class="stat-icon @(profitSummary.profit >= 0 ? "green" : "red")">📈</div><div class="stat-info"><h4>Net Profit</h4><div class="stat-value">@cs@profitSummary.profit.ToString("N0")</div></div></div>
+</div>
+
+<div class="charts-grid">
+    <div class="chart-card"><h3>Monthly Revenue (Last 12 Months)</h3><canvas id="revenueChart" height="200"></canvas></div>
+    <div class="chart-card"><h3>Category Value Distribution</h3><canvas id="categoryChart" height="200"></canvas></div>
+</div>
+
+<div class="charts-grid">
+    <div class="card"><div class="card-header"><h3>🏆 Top Selling Products</h3></div><div class="table-container"><table>
+        <thead><tr><th>#</th><th>Product</th><th>Category</th><th>Units Sold</th></tr></thead>
+        <tbody>@{ int rank = 1; } @foreach (var (p, sold) in topSelling) { <tr><td>@(rank++)</td><td style="font-weight:600;">@p.Name</td><td>@p.Category.Name</td><td><span class="badge badge-success">@sold</span></td></tr> }</tbody>
+    </table></div></div>
+
+    <div class="card"><div class="card-header"><h3>⚠️ Low Stock Report</h3></div><div class="table-container"><table>
+        <thead><tr><th>Product</th><th>Warehouse</th><th>Current</th><th>Reorder Level</th></tr></thead>
+        <tbody>
+            @foreach (var inv in lowStock) { <tr><td style="font-weight:600;">@inv.Product.Name</td><td>@(inv.Warehouse?.Name ?? "—")</td><td><span class="badge badge-danger">@inv.Quantity</span></td><td>@inv.Product.ReorderLevel</td></tr> }
+            @if (!lowStock.Any()) { <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">All items well-stocked 🎉</td></tr> }
+        </tbody>
+    </table></div></div>
+</div>
+
+@section Scripts {
+<script>
+new Chart(document.getElementById('revenueChart'), {
+    type: 'line', data: { labels: [@Html.Raw(string.Join(",", monthlyRevenue.Select(r => $"'{r.month}'")))], datasets: [{ label: 'Revenue', data: [@Html.Raw(string.Join(",", monthlyRevenue.Select(r => r.revenue.ToString("F0"))))], borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.1)', fill: true, tension: 0.4 }] },
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(51,65,85,0.5)' }, ticks: { color: '#94a3b8' } }, x: { grid: { display: false }, ticks: { color: '#94a3b8' } } } }
+});
+new Chart(document.getElementById('categoryChart'), {
+    type: 'pie', data: { labels: [@Html.Raw(string.Join(",", categoryDist.Select(c => $"'{c.category.Name}'")))], datasets: [{ data: [@Html.Raw(string.Join(",", categoryDist.Select(c => c.value.ToString("F0"))))], backgroundColor: ['#4f46e5','#10b981','#f59e0b','#ef4444','#06b6d4','#a855f7'], borderWidth: 0 }] },
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } }
+});
+</script>
+}

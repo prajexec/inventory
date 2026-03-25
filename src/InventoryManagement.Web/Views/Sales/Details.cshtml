@@ -1,0 +1,52 @@
+@model SalesOrder
+@{ ViewData["Title"] = $"Sale: {Model.OrderNumber}"; var cs = (string)ViewBag.CurrencySymbol; }
+
+<div class="card" style="max-width:800px;">
+    <div class="card-header">
+        <h3>@Model.OrderNumber</h3>
+        <span class="badge @(Model.Status == SalesOrderStatus.Confirmed ? "badge-success" : "badge-info")" style="font-size:14px;">@Model.Status</span>
+    </div>
+    <div class="card-body">
+        <div class="form-row" style="margin-bottom:20px;">
+            <div><strong style="color:var(--text-muted); font-size:13px;">Customer</strong><br/>@(Model.Customer?.Name ?? "Walk-in")</div>
+            <div><strong style="color:var(--text-muted); font-size:13px;">Warehouse</strong><br/>@Model.Warehouse.Name</div>
+            <div><strong style="color:var(--text-muted); font-size:13px;">Created By</strong><br/>@Model.CreatedBy.FullName</div>
+            <div><strong style="color:var(--text-muted); font-size:13px;">Date</strong><br/>@Model.OrderDate.ToString("MMM dd, yyyy")</div>
+        </div>
+
+        <div class="table-container"><table>
+            <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Disc %</th><th>Total</th><th>Returned</th><th>Action</th></tr></thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td style="font-weight:600;">@item.Product.Name</td>
+                        <td>@item.Quantity @item.Product.Unit.Abbreviation</td>
+                        <td>@cs@item.UnitPrice.ToString("N2")</td>
+                        <td>@item.DiscountPercent%</td>
+                        <td style="font-weight:700;">@cs@item.TotalPrice.ToString("N2")</td>
+                        <td>@item.ReturnedQuantity</td>
+                        <td>
+                            @if (item.ReturnedQuantity < item.Quantity)
+                            {
+                                <form method="post" asp-action="ProcessReturn" style="display:inline-flex; gap:4px;">
+                                    <input type="hidden" name="salesOrderId" value="@Model.Id" />
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="number" name="returnQuantity" value="1" min="1" max="@(item.Quantity - item.ReturnedQuantity)" style="width:60px;" class="form-control" />
+                                    <button type="submit" class="btn btn-warning btn-sm">Return</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table></div>
+
+        <div style="text-align:right; margin-top:20px; padding:16px; background:rgba(79,70,229,0.05); border-radius:8px;">
+            <div>Subtotal: @cs@Model.SubTotal.ToString("N2")</div>
+            <div>Discount (@Model.DiscountPercent%): -@cs@Model.DiscountAmount.ToString("N2")</div>
+            <div>Tax (@Model.TaxPercent%): +@cs@Model.TaxAmount.ToString("N2")</div>
+            <div style="font-size:24px; font-weight:700; color:var(--success); margin-top:8px;">Total: @cs@Model.TotalAmount.ToString("N2")</div>
+        </div>
+    </div>
+</div>

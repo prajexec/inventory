@@ -1,0 +1,49 @@
+@model List<Notification>
+@{ ViewData["Title"] = "Notifications"; }
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:22px;">
+    <p style="color:var(--text-muted); font-size:13px;">System alerts and notifications</p>
+    <form method="post" asp-action="MarkAllRead"><button type="submit" class="btn btn-secondary btn-sm">Mark All as Read</button></form>
+</div>
+<div class="card">
+    <div class="notification-list">
+        @foreach (var n in Model)
+        {
+            <div class="notification-item @(n.IsRead ? "" : "unread")" style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; gap:12px; align-items:flex-start;">
+                    <div class="notification-icon @(n.Type == NotificationType.LowStock ? "low-stock" : n.Type == NotificationType.ExpiringProduct ? "expiry" : "pending")">
+                        @if (n.Type == NotificationType.LowStock)
+                        {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        }
+                        else if (n.Type == NotificationType.ExpiringProduct)
+                        {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        }
+                        else
+                        {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        }
+                    </div>
+                    <div>
+                        <div style="font-weight:600; color:var(--text); font-size:13px;">@n.Title</div>
+                        <div style="font-size:12px; color:var(--text-muted);">@n.Message</div>
+                        <div style="font-size:11px; color:var(--text-dim); margin-top:3px;">@n.CreatedAt.ToString("MMM dd, yyyy HH:mm")</div>
+                    </div>
+                </div>
+                @if (!n.IsRead)
+                {
+                    <form method="post" asp-action="MarkAsRead"><input type="hidden" name="id" value="@n.Id" /><button type="submit" class="btn btn-secondary btn-sm" title="Mark as read"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></form>
+                }
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                </div>
+                <p>No notifications</p>
+            </div>
+        }
+    </div>
+</div>

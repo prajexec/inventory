@@ -1,0 +1,29 @@
+@model List<PurchaseOrder>
+@{ ViewData["Title"] = "Purchase Orders"; }
+<div style="display:flex; justify-content:space-between; margin-bottom:24px;">
+    <div style="display:flex; gap:8px;">
+        <a href="/Purchase" class="btn @(ViewBag.Status == null ? "btn-primary" : "btn-secondary") btn-sm">All</a>
+        <a href="/Purchase?status=0" class="btn @(ViewBag.Status != null && (OrderStatus)ViewBag.Status == OrderStatus.Pending ? "btn-warning" : "btn-secondary") btn-sm">Pending</a>
+        <a href="/Purchase?status=1" class="btn @(ViewBag.Status != null && (OrderStatus)ViewBag.Status == OrderStatus.Approved ? "btn-primary" : "btn-secondary") btn-sm">Approved</a>
+        <a href="/Purchase?status=2" class="btn @(ViewBag.Status != null && (OrderStatus)ViewBag.Status == OrderStatus.Delivered ? "btn-success" : "btn-secondary") btn-sm">Delivered</a>
+    </div>
+    <a href="/Purchase/Create" class="btn btn-primary">+ New Purchase Order</a>
+</div>
+<div class="card"><div class="table-container"><table>
+    <thead><tr><th>Order #</th><th>Supplier</th><th>Warehouse</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+    <tbody>
+        @foreach (var po in Model)
+        {
+            <tr>
+                <td><code style="color:var(--primary-light);">@po.OrderNumber</code></td>
+                <td style="font-weight:600;">@po.Supplier.Name</td>
+                <td>@po.Warehouse.Name</td>
+                <td>@po.Items.Count</td>
+                <td style="font-weight:700;">₹@po.TotalAmount.ToString("N2")</td>
+                <td><span class="badge @(po.Status == OrderStatus.Pending ? "badge-warning" : po.Status == OrderStatus.Approved ? "badge-info" : po.Status == OrderStatus.Delivered ? "badge-success" : "badge-danger")">@po.Status</span></td>
+                <td>@po.OrderDate.ToString("MMM dd, yyyy")</td>
+                <td><a href="/Purchase/Details/@po.Id" class="btn btn-secondary btn-sm">View</a></td>
+            </tr>
+        }
+    </tbody>
+</table></div></div>

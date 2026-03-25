@@ -1,0 +1,23 @@
+@model Warehouse
+@{ ViewData["Title"] = Model.Name; }
+<div class="card" style="max-width:800px;">
+    <div class="card-header"><h3>@Model.Name</h3><a href="/Warehouse/Edit/@Model.Id" class="btn btn-warning btn-sm">Edit</a></div>
+    <div class="card-body">
+        <div class="form-row" style="margin-bottom:20px;">
+            <div><strong style="color:var(--text-muted);">Address</strong><br/>@(Model.Address ?? "—")</div>
+            <div><strong style="color:var(--text-muted);">City</strong><br/>@(Model.City ?? "—")</div>
+            <div><strong style="color:var(--text-muted);">Manager</strong><br/>@(Model.Manager?.FullName ?? "—")</div>
+        </div>
+        <h4 style="margin-bottom:12px;">Stock in this Warehouse</h4>
+        <div class="table-container"><table>
+            <thead><tr><th>Product</th><th>Quantity</th></tr></thead>
+            <tbody>
+                @foreach (var inv in Model.Inventories)
+                {
+                    <tr><td>@inv.Product.Name</td><td><span class="badge badge-success">@inv.Quantity</span></td></tr>
+                }
+                @if (!Model.Inventories.Any()) { <tr><td colspan="2" style="text-align:center; color:var(--text-muted);">No stock</td></tr> }
+            </tbody>
+        </table></div>
+    </div>
+</div>

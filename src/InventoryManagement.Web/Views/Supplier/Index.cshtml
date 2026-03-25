@@ -1,0 +1,23 @@
+@model List<Supplier>
+@{ ViewData["Title"] = "Suppliers"; }
+<div class="search-bar">
+    <form method="get" style="display:flex; gap:12px;"><input type="text" name="search" class="form-control" value="@ViewBag.Search" placeholder="Search suppliers..." /><button type="submit" class="btn btn-primary">Search</button></form>
+    <div style="margin-left:auto;"><a href="/Supplier/Create" class="btn btn-primary">+ Add Supplier</a></div>
+</div>
+<div class="card"><div class="table-container"><table>
+    <thead><tr><th>Name</th><th>Contact</th><th>Email</th><th>Phone</th><th>City</th><th>Rating</th><th>Actions</th></tr></thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td style="font-weight:600; color:var(--text-primary);">@s.Name</td>
+                <td>@(s.ContactPerson ?? "—")</td><td>@(s.Email ?? "—")</td><td>@(s.Phone ?? "—")</td><td>@(s.City ?? "—")</td>
+                <td class="rating">@(new string('★', s.Rating))@(new string('☆', 5 - s.Rating))</td>
+                <td class="actions-row">
+                    <a href="/Supplier/Details/@s.Id" class="btn btn-secondary btn-sm">View</a>
+                    <a href="/Supplier/Edit/@s.Id" class="btn btn-warning btn-sm">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table></div></div>

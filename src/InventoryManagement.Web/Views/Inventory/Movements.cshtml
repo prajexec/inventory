@@ -1,0 +1,32 @@
+@model List<StockMovement>
+@{ ViewData["Title"] = "Stock Movements"; }
+
+<div class="card">
+    <div class="card-header"><h3>Stock Movement History</h3></div>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>Date</th><th>Product</th><th>Warehouse</th><th>Type</th><th>Qty</th><th>Before</th><th>After</th><th>Reference</th><th>By</th></tr></thead>
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td>@m.Timestamp.ToString("MMM dd, HH:mm")</td>
+                        <td style="font-weight:600;">@m.Product.Name</td>
+                        <td>@m.Warehouse.Name</td>
+                        <td>
+                            <span class="badge @(m.MovementType == MovementType.StockIn ? "badge-success" : m.MovementType == MovementType.StockOut ? "badge-danger" : m.MovementType == MovementType.Return ? "badge-warning" : "badge-info")">
+                                @m.MovementType
+                            </span>
+                        </td>
+                        <td style="font-weight:700;">@m.Quantity</td>
+                        <td>@m.PreviousQuantity</td>
+                        <td>@m.NewQuantity</td>
+                        <td><code>@(m.ReferenceNumber ?? "—")</code></td>
+                        <td>@(m.PerformedBy?.FullName ?? "—")</td>
+                    </tr>
+                }
+                @if (!Model.Any()) { <tr><td colspan="9" style="text-align:center; color:var(--text-muted); padding:32px;">No movements recorded</td></tr> }
+            </tbody>
+        </table>
+    </div>
+</div>

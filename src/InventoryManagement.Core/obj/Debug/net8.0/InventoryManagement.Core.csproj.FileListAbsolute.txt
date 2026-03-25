@@ -1,0 +1,11 @@
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/bin/Debug/net8.0/InventoryManagement.Core.deps.json
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/bin/Debug/net8.0/InventoryManagement.Core.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/bin/Debug/net8.0/InventoryManagement.Core.pdb
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/InventoryManagement.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/InventoryManagement.Core.AssemblyInfoInputs.cache
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/InventoryManagement.Core.AssemblyInfo.cs
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/InventoryManagement.Core.csproj.CoreCompileInputs.cache
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/InventoryManagement.Core.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/refint/InventoryManagement.Core.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/InventoryManagement.Core.pdb
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Core/obj/Debug/net8.0/ref/InventoryManagement.Core.dll

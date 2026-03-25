@@ -1,0 +1,19 @@
+@model List<Customer>
+@{ ViewData["Title"] = "Customers"; }
+<div class="search-bar">
+    <form method="get" style="display:flex; gap:12px;"><input type="text" name="search" class="form-control" value="@ViewBag.Search" placeholder="Search customers..." /><button type="submit" class="btn btn-primary">Search</button></form>
+    <div style="margin-left:auto;"><a href="/Sales/CreateCustomer" class="btn btn-primary">+ Add Customer</a></div>
+</div>
+<div class="card"><div class="table-container"><table>
+    <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>City</th><th>Actions</th></tr></thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td style="font-weight:600; color:var(--text-primary);">@c.Name</td>
+                <td>@(c.Email ?? "—")</td><td>@(c.Phone ?? "—")</td><td>@(c.City ?? "—")</td>
+                <td><a href="/Sales/EditCustomer/@c.Id" class="btn btn-secondary btn-sm">Edit</a></td>
+            </tr>
+        }
+    </tbody>
+</table></div></div>

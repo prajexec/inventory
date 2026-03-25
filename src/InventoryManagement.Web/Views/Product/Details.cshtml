@@ -1,0 +1,95 @@
+@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div style="display:flex; gap:24px; flex-wrap:wrap;">
+    <div class="card" style="flex:1; min-width:400px;">
+        <div class="card-header">
+            <h3>Product Details</h3>
+            <div class="actions-row">
+                <a href="/Product/Edit/@Model.Id" class="btn btn-warning btn-sm">Edit</a>
+                <form method="post" asp-action="Delete" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deactivate this product?')">Deactivate</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (Model.ImagePath != null)
+            {
+                <img src="@Model.ImagePath" alt="@Model.Name" style="max-width:200px; border-radius:8px; margin-bottom:16px;" />
+            }
+            <div class="form-row">
+                <div><strong style="color:var(--text-muted); font-size:13px;">SKU</strong><br/><code style="color:var(--primary-light);">@Model.SKU</code></div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Barcode</strong><br/>@(Model.Barcode ?? "—")</div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Category</strong><br/><span class="badge badge-primary">@Model.Category.Name</span></div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Unit</strong><br/>@Model.Unit.Name (@Model.Unit.Abbreviation)</div>
+            </div>
+            <hr style="border-color:var(--border-color); margin:20px 0;" />
+            <div class="form-row">
+                <div><strong style="color:var(--text-muted); font-size:13px;">Cost Price</strong><br/><span style="font-size:20px; font-weight:700;">₹@Model.CostPrice.ToString("N2")</span></div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Selling Price</strong><br/><span style="font-size:20px; font-weight:700; color:var(--success);">₹@Model.SellingPrice.ToString("N2")</span></div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Reorder Level</strong><br/>@Model.ReorderLevel</div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <hr style="border-color:var(--border-color); margin:20px 0;" />
+                <p style="color:var(--text-secondary);">@Model.Description</p>
+            }
+        </div>
+    </div>
+
+    <div style="width:360px;">
+        <div class="card" style="margin-bottom:24px;">
+            <div class="card-header"><h3>Stock Levels</h3></div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Warehouse</th><th>Qty</th></tr></thead>
+                    <tbody>
+                        @foreach (var inv in Model.Inventories)
+                        {
+                            <tr>
+                                <td>@inv.Warehouse.Name</td>
+                                <td>
+                                    <span class="badge @(inv.Quantity <= Model.ReorderLevel ? "badge-danger" : "badge-success")">
+                                        @inv.Quantity
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Inventories.Any())
+                        {
+                            <tr><td colspan="2" style="text-align:center; color:var(--text-muted);">No stock records</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Suppliers</h3></div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Supplier</th><th>Price</th></tr></thead>
+                    <tbody>
+                        @foreach (var ps in Model.ProductSuppliers)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/Supplier/Details/@ps.SupplierId">@ps.Supplier.Name</a>
+                                    @if (ps.IsPrimarySupplier) { <span class="badge badge-info" style="margin-left:4px;">Primary</span> }
+                                </td>
+                                <td>₹@ps.SupplierPrice.ToString("N2")</td>
+                            </tr>
+                        }
+                        @if (!Model.ProductSuppliers.Any())
+                        {
+                            <tr><td colspan="2" style="text-align:center; color:var(--text-muted);">No suppliers linked</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

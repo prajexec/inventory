@@ -1,0 +1,35 @@
+@model List<Category>
+@{ ViewData["Title"] = "Categories"; }
+
+<div style="display:flex; gap:24px; flex-wrap:wrap;">
+    <div class="card" style="flex:1; min-width:400px;">
+        <div class="card-header"><h3>All Categories</h3></div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Name</th><th>Description</th><th>Products</th><th>Status</th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model)
+                    {
+                        <tr>
+                            <td style="font-weight:600; color:var(--text-primary);">@c.Name</td>
+                            <td>@(c.Description ?? "—")</td>
+                            <td><span class="badge badge-info">@c.Products.Count</span></td>
+                            <td>@(c.IsActive ? "Active" : "Inactive")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card" style="width:360px;">
+        <div class="card-header"><h3>Add / Edit Category</h3></div>
+        <div class="card-body">
+            <form method="post" asp-action="SaveCategory">
+                <div class="form-group"><label>Name *</label><input type="text" name="Name" class="form-control" required /></div>
+                <div class="form-group"><label>Description</label><textarea name="Description" class="form-control"></textarea></div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

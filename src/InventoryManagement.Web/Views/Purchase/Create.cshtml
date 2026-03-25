@@ -1,0 +1,50 @@
+@{ ViewData["Title"] = "Create Purchase Order"; var suppliers = (List<Supplier>)ViewBag.Suppliers; var warehouses = (List<Warehouse>)ViewBag.Warehouses; var products = (List<Product>)ViewBag.Products; }
+
+<div class="card" style="max-width:900px;">
+    <div class="card-header"><h3>New Purchase Order</h3></div>
+    <div class="card-body">
+        @if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+        <form method="post" asp-action="Create">
+            <div class="form-row">
+                <div class="form-group"><label>Supplier *</label>
+                    <select name="supplierId" class="form-control" required>
+                        @foreach (var s in suppliers) { <option value="@s.Id">@s.Name</option> }
+                    </select></div>
+                <div class="form-group"><label>Warehouse *</label>
+                    <select name="warehouseId" class="form-control" required>
+                        @foreach (var w in warehouses) { <option value="@w.Id">@w.Name</option> }
+                    </select></div>
+            </div>
+            <div class="form-group"><label>Notes</label><textarea name="notes" class="form-control"></textarea></div>
+            <hr style="border-color:var(--border-color); margin:20px 0;" />
+            <h4 style="margin-bottom:16px;">Order Items</h4>
+            <div id="items">
+                <div class="form-row" style="margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;"><label>Product</label>
+                        <select name="productIds" class="form-control">
+                            @foreach (var p in products) { <option value="@p.Id">@p.Name (₹@p.CostPrice)</option> }
+                        </select></div>
+                    <div class="form-group" style="margin-bottom:0;"><label>Qty</label><input type="number" name="quantities" class="form-control" value="1" min="1" /></div>
+                    <div class="form-group" style="margin-bottom:0;"><label>Unit Price</label><input type="number" name="unitPrices" class="form-control" step="0.01" value="0" /></div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addItem()" style="margin-bottom:20px;">+ Add Another Item</button>
+            <br/>
+            <button type="submit" class="btn btn-primary">Create Purchase Order</button>
+            <a href="/Purchase" class="btn btn-secondary" style="margin-left:8px;">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function addItem() {
+    const div = document.getElementById('items');
+    div.innerHTML += `<div class="form-row" style="margin-bottom:12px;">
+        <div class="form-group" style="margin-bottom:0;"><select name="productIds" class="form-control">@Html.Raw(string.Join("", products.Select(p => $"<option value='{p.Id}'>{p.Name} (₹{p.CostPrice})</option>")))</select></div>
+        <div class="form-group" style="margin-bottom:0;"><input type="number" name="quantities" class="form-control" value="1" min="1" /></div>
+        <div class="form-group" style="margin-bottom:0;"><input type="number" name="unitPrices" class="form-control" step="0.01" value="0" /></div>
+    </div>`;
+}
+</script>
+}

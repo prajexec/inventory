@@ -1,0 +1,21 @@
+@{ ViewData["Title"] = "Stock Transfer"; var warehouses = (List<Warehouse>)ViewBag.Warehouses; var products = (List<Product>)ViewBag.Products; }
+<div class="card" style="max-width:800px;"><div class="card-header"><h3>Transfer Stock Between Warehouses</h3></div><div class="card-body">
+    @if (ViewBag.Error != null) { <div class="alert alert-danger">@ViewBag.Error</div> }
+    <form method="post" asp-action="Transfer">
+        <div class="form-row">
+            <div class="form-group"><label>From Warehouse *</label><select name="fromWarehouseId" class="form-control" required>@foreach (var w in warehouses) { <option value="@w.Id">@w.Name</option> }</select></div>
+            <div class="form-group"><label>To Warehouse *</label><select name="toWarehouseId" class="form-control" required>@foreach (var w in warehouses) { <option value="@w.Id">@w.Name</option> }</select></div>
+        </div>
+        <div class="form-group"><label>Notes</label><textarea name="notes" class="form-control"></textarea></div>
+        <h4 style="margin:16px 0;">Items to Transfer</h4>
+        <div id="items">
+            <div class="form-row" style="margin-bottom:12px;">
+                <div class="form-group" style="flex:2; margin-bottom:0;"><label>Product</label><select name="productIds" class="form-control">@foreach (var p in products) { <option value="@p.Id">@p.Name</option> }</select></div>
+                <div class="form-group" style="margin-bottom:0;"><label>Quantity</label><input type="number" name="quantities" class="form-control" value="1" min="1" /></div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('items').innerHTML += document.getElementById('items').children[0].outerHTML" style="margin-bottom:20px;">+ Add Item</button><br/>
+        <button type="submit" class="btn btn-primary">Complete Transfer</button>
+        <a href="/Warehouse/Transfers" class="btn btn-secondary" style="margin-left:8px;">Cancel</a>
+    </form>
+</div></div>

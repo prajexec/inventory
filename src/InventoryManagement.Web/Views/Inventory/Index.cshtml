@@ -1,0 +1,55 @@
+@model List<Inventory>
+@{ ViewData["Title"] = "Stock Levels"; var warehouses = (List<Warehouse>)ViewBag.Warehouses; }
+
+<div class="search-bar">
+    <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+        <div class="form-group" style="margin-bottom:0;">
+            <label>Search</label>
+            <input type="text" name="search" class="form-control" value="@ViewBag.Search" placeholder="Product name or SKU..." />
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label>Warehouse</label>
+            <select name="warehouseId" class="form-control">
+                <option value="">All Warehouses</option>
+                @foreach (var w in warehouses)
+                {
+                    if (ViewBag.WarehouseId != null && (int)ViewBag.WarehouseId == w.Id)
+                    {
+                        <option value="@w.Id" selected>@w.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@w.Id">@w.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+    <div style="margin-left:auto;"><a href="/Inventory/Adjust" class="btn btn-warning">± Adjust Stock</a></div>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Warehouse</th><th>Quantity</th><th>Unit</th><th>Status</th></tr></thead>
+            <tbody>
+                @foreach (var inv in Model)
+                {
+                    <tr>
+                        <td style="font-weight:600; color:var(--text-primary);">@inv.Product.Name</td>
+                        <td><code style="color:var(--primary-light);">@inv.Product.SKU</code></td>
+                        <td><span class="badge badge-primary">@inv.Product.Category.Name</span></td>
+                        <td>@inv.Warehouse.Name</td>
+                        <td style="font-weight:700;">@inv.Quantity</td>
+                        <td>@inv.Product.Unit.Abbreviation</td>
+                        <td>
+                            @if (inv.Quantity <= inv.Product.ReorderLevel) { <span class="badge badge-danger">Low Stock</span> }
+                            else { <span class="badge badge-success">In Stock</span> }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

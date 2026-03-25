@@ -1,0 +1,31 @@
+@model List<Unit>
+@{ ViewData["Title"] = "Units of Measurement"; }
+
+<div style="display:flex; gap:24px; flex-wrap:wrap;">
+    <div class="card" style="flex:1;">
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Name</th><th>Abbreviation</th></tr></thead>
+                <tbody>
+                    @foreach (var u in Model)
+                    {
+                        <tr>
+                            <td style="font-weight:600; color:var(--text-primary);">@u.Name</td>
+                            <td><code>@u.Abbreviation</code></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card" style="width:360px;">
+        <div class="card-header"><h3>Add Unit</h3></div>
+        <div class="card-body">
+            <form method="post" asp-action="SaveUnit">
+                <div class="form-group"><label>Name *</label><input type="text" name="Name" class="form-control" required /></div>
+                <div class="form-group"><label>Abbreviation *</label><input type="text" name="Abbreviation" class="form-control" required maxlength="10" /></div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>

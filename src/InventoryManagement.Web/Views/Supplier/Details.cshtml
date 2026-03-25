@@ -1,0 +1,48 @@
+@model Supplier
+@{ ViewData["Title"] = Model.Name; var balance = (decimal)ViewBag.OutstandingBalance; var payments = (List<SupplierPayment>)ViewBag.Payments; }
+
+<div style="display:flex; gap:24px; flex-wrap:wrap;">
+    <div class="card" style="flex:1; min-width:400px;">
+        <div class="card-header"><h3>Supplier Details</h3><a href="/Supplier/Edit/@Model.Id" class="btn btn-warning btn-sm">Edit</a></div>
+        <div class="card-body">
+            <div class="form-row">
+                <div><strong style="color:var(--text-muted); font-size:13px;">Contact</strong><br/>@(Model.ContactPerson ?? "—")</div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Email</strong><br/>@(Model.Email ?? "—")</div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Phone</strong><br/>@(Model.Phone ?? "—")</div>
+            </div>
+            <div class="form-row" style="margin-top:16px;">
+                <div><strong style="color:var(--text-muted); font-size:13px;">Address</strong><br/>@(Model.Address ?? "—"), @(Model.City ?? "")</div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Rating</strong><br/><span class="rating">@(new string('★', Model.Rating))@(new string('☆', 5 - Model.Rating))</span></div>
+                <div><strong style="color:var(--text-muted); font-size:13px;">Outstanding</strong><br/><span style="font-size:20px; font-weight:700; color:@(balance > 0 ? "var(--danger)" : "var(--success)");">₹@balance.ToString("N2")</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="width:400px;">
+        <div class="card-header"><h3>Record Payment</h3></div>
+        <div class="card-body">
+            <form method="post" asp-action="RecordPayment">
+                <input type="hidden" name="supplierId" value="@Model.Id" />
+                <div class="form-group"><label>Amount *</label><input type="number" name="amount" class="form-control" step="0.01" required /></div>
+                <div class="form-group"><label>Payment Method</label>
+                    <select name="paymentMethod" class="form-control">
+                        <option value="0">Cash</option><option value="1">Bank Transfer</option><option value="2">Credit Card</option><option value="3">Cheque</option>
+                    </select></div>
+                <div class="form-group"><label>Reference #</label><input type="text" name="referenceNumber" class="form-control" /></div>
+                <button type="submit" class="btn btn-success">Record Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (payments.Any())
+{
+    <div class="card" style="margin-top:24px;">
+        <div class="card-header"><h3>Payment History</h3></div>
+        <div class="table-container"><table>
+            <thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Reference</th></tr></thead>
+            <tbody>
+                @foreach (var p in payments) { <tr><td>@p.PaymentDate.ToString("MMM dd, yyyy")</td><td style="font-weight:700;">₹@p.Amount.ToString("N2")</td><td>@p.PaymentMethod</td><td>@(p.ReferenceNumber ?? "—")</td></tr> }
+            </tbody>
+        </table></div>
+    </div>
+}

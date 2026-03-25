@@ -1,0 +1,80 @@
+@model List<Product>
+@{
+    ViewData["Title"] = "Products";
+    var categories = (List<Category>)ViewBag.Categories;
+}
+
+<div class="search-bar">
+    <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+        <div class="form-group" style="margin-bottom:0;">
+            <label>Search</label>
+            <input type="text" name="search" class="form-control" value="@ViewBag.Search" placeholder="Name, SKU, or barcode..." />
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+            <label>Category</label>
+            <select name="categoryId" class="form-control">
+                <option value="">All Categories</option>
+                @foreach (var c in categories)
+                {
+                    if (ViewBag.CategoryId != null && (int)ViewBag.CategoryId == c.Id)
+                    {
+                        <option value="@c.Id" selected>@c.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="/Product" class="btn btn-secondary">Reset</a>
+    </form>
+    <div style="margin-left:auto;">
+        <a href="/Product/Create" class="btn btn-primary">+ Add Product</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>SKU</th><th>Product Name</th><th>Category</th>
+                    <th>Cost Price</th><th>Selling Price</th><th>Status</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td><code style="color:var(--primary-light);">@p.SKU</code></td>
+                        <td style="font-weight:600; color:var(--text-primary);">@p.Name</td>
+                        <td><span class="badge badge-primary">@p.Category.Name</span></td>
+                        <td>₹@p.CostPrice.ToString("N2")</td>
+                        <td>₹@p.SellingPrice.ToString("N2")</td>
+                        <td>
+                            @if (p.IsActive) { <span class="badge badge-success">Active</span> }
+                            else { <span class="badge badge-secondary">Inactive</span> }
+                        </td>
+                        <td class="actions-row">
+                            <a href="/Product/Details/@p.Id" class="btn btn-secondary btn-sm">View</a>
+                            <a href="/Product/Edit/@p.Id" class="btn btn-warning btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if ((int)ViewBag.TotalPages > 1)
+{
+    <div class="pagination">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <a href="/Product?page=@i&search=@ViewBag.Search&categoryId=@ViewBag.CategoryId"
+               class="@(i == (int)ViewBag.Page ? "active" : "")">@i</a>
+        }
+    </div>
+}

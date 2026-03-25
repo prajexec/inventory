@@ -1,0 +1,25 @@
+@model List<Inventory>
+@{ ViewData["Title"] = "Low Stock Alerts"; }
+
+<div class="alert alert-warning">⚠️ Products below their reorder level</div>
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead><tr><th>Product</th><th>SKU</th><th>Warehouse</th><th>Current Qty</th><th>Reorder Level</th><th>Action</th></tr></thead>
+            <tbody>
+                @foreach (var inv in Model)
+                {
+                    <tr>
+                        <td style="font-weight:600; color:var(--text-primary);">@inv.Product.Name</td>
+                        <td><code>@inv.Product.SKU</code></td>
+                        <td>@(inv.Warehouse?.Name ?? "—")</td>
+                        <td><span class="badge badge-danger">@inv.Quantity</span></td>
+                        <td>@inv.Product.ReorderLevel</td>
+                        <td><a href="/Purchase/Create" class="btn btn-primary btn-sm">Reorder</a></td>
+                    </tr>
+                }
+                @if (!Model.Any()) { <tr><td colspan="6" class="empty-state">No low stock items 🎉</td></tr> }
+            </tbody>
+        </table>
+    </div>
+</div>

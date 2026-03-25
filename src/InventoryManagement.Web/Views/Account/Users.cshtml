@@ -1,0 +1,51 @@
+@model List<User>
+@{
+    ViewData["Title"] = "User Management";
+    var roles = (List<Role>)ViewBag.Roles;
+}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <p style="color:var(--text-muted);">Manage system users and their roles</p>
+    <a href="/Account/CreateUser" class="btn btn-primary">+ Add User</a>
+</div>
+
+<div class="card">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Roles</th>
+                    <th>Status</th>
+                    <th>Last Login</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td style="font-weight:600; color:var(--text-primary);">@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @foreach (var ur in user.UserRoles)
+                            {
+                                <span class="badge badge-primary" style="margin-right:4px;">@ur.Role.Name</span>
+                            }
+                        </td>
+                        <td>
+                            @if (user.IsLocked) { <span class="badge badge-danger">Locked</span> }
+                            else if (user.IsActive) { <span class="badge badge-success">Active</span> }
+                            else { <span class="badge badge-secondary">Inactive</span> }
+                        </td>
+                        <td>@(user.LastLoginAt?.ToString("MMM dd, yyyy HH:mm") ?? "Never")</td>
+                        <td>
+                            <a href="/Account/EditUser/@user.Id" class="btn btn-secondary btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

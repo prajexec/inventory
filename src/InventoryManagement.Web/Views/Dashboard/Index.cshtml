@@ -1,0 +1,213 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    var stats = (Dictionary<string, int>)ViewBag.Stats;
+    var currencySymbol = (string)ViewBag.CurrencySymbol;
+    var inventoryValue = (decimal)ViewBag.InventoryValue;
+    var topSelling = (List<(Product product, int totalSold)>)ViewBag.TopSelling;
+    var monthlyRevenue = (List<(string month, decimal revenue)>)ViewBag.MonthlyRevenue;
+    var categoryDist = (List<(Category category, int productCount, decimal value)>)ViewBag.CategoryDistribution;
+    var salesTrends = (List<(string month, decimal sales)>)ViewBag.SalesTrends;
+    var profitSummary = ((decimal totalSales, decimal totalPurchases, decimal profit))ViewBag.ProfitSummary;
+    var notifications = (List<Notification>)ViewBag.Notifications;
+}
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <div class="stat-info"><h4>Total Products</h4><div class="stat-value">@stats["TotalProducts"]</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="stat-info"><h4>Inventory Value</h4><div class="stat-value">@currencySymbol@inventoryValue.ToString("N0")</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="stat-info"><h4>Total Sales</h4><div class="stat-value">@currencySymbol@profitSummary.totalSales.ToString("N0")</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="stat-info"><h4>Profit</h4><div class="stat-value">@currencySymbol@profitSummary.profit.ToString("N0")</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="stat-info"><h4>Low Stock Items</h4><div class="stat-value">@stats["LowStockItems"]</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        </div>
+        <div class="stat-info"><h4>Pending POs</h4><div class="stat-value">@stats["PendingPurchaseOrders"]</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon teal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="stat-info"><h4>Suppliers</h4><div class="stat-value">@stats["TotalSuppliers"]</div></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-info"><h4>Customers</h4><div class="stat-value">@stats["TotalCustomers"]</div></div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="charts-grid">
+    <div class="chart-card">
+        <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Monthly Revenue
+        </h3>
+        <canvas id="revenueChart" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+        <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg>
+            Category Distribution
+        </h3>
+        <canvas id="categoryChart" height="200"></canvas>
+    </div>
+</div>
+
+<div class="charts-grid">
+    <!-- Top Selling Products -->
+    <div class="card">
+        <div class="card-header">
+            <h3>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Top Selling Products
+            </h3>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Product</th><th>Category</th><th>Units Sold</th></tr></thead>
+                <tbody>
+                    @foreach (var (product, totalSold) in topSelling)
+                    {
+                        <tr>
+                            <td style="font-weight:600; color:var(--text);">@product.Name</td>
+                            <td>@product.Category.Name</td>
+                            <td><span class="badge badge-success">@totalSold</span></td>
+                        </tr>
+                    }
+                    @if (!topSelling.Any())
+                    {
+                        <tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:28px;">No sales data yet</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Notifications -->
+    <div class="card">
+        <div class="card-header">
+            <h3>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                Recent Alerts
+            </h3>
+            <a href="/Notification" class="btn btn-secondary btn-sm">View All</a>
+        </div>
+        <div class="notification-list">
+            @foreach (var n in notifications.Take(5))
+            {
+                <div class="notification-item @(n.IsRead ? "" : "unread")">
+                    <div class="notification-icon @(n.Type == NotificationType.LowStock ? "low-stock" : n.Type == NotificationType.ExpiringProduct ? "expiry" : "pending")">
+                        @if (n.Type == NotificationType.LowStock)
+                        {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        }
+                        else if (n.Type == NotificationType.ExpiringProduct)
+                        {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        }
+                        else
+                        {
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        }
+                    </div>
+                    <div>
+                        <div style="font-weight:600; font-size:13px; color:var(--text);">@n.Title</div>
+                        <div style="font-size:12px; color:var(--text-muted);">@n.Message</div>
+                        <div style="font-size:11px; color:var(--text-dim); margin-top:3px;">@n.CreatedAt.ToString("MMM dd, HH:mm")</div>
+                    </div>
+                </div>
+            }
+            @if (!notifications.Any())
+            {
+                <div style="padding:32px; text-align:center; color:var(--text-muted); font-size:13px;">No alerts</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Revenue Chart
+    const revLabels = [@Html.Raw(string.Join(",", monthlyRevenue.Select(r => $"'{r.month}'")))];
+    const revData = [@Html.Raw(string.Join(",", monthlyRevenue.Select(r => r.revenue.ToString("F0"))))];
+
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'bar',
+        data: {
+            labels: revLabels,
+            datasets: [{
+                label: 'Revenue (@currencySymbol)',
+                data: revData,
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                borderColor: '#0f172a',
+                borderWidth: 1,
+                borderRadius: 6,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { color: '#64748b', font: { size: 11 } } },
+                x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 11 } } }
+            }
+        }
+    });
+
+    // Category Chart
+    const catLabels = [@Html.Raw(string.Join(",", categoryDist.Select(c => $"'{c.category.Name}'")))];
+    const catData = [@Html.Raw(string.Join(",", categoryDist.Select(c => c.productCount.ToString())))];
+
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'doughnut',
+        data: {
+            labels: catLabels,
+            datasets: [{
+                data: catData,
+                backgroundColor: ['#0f172a', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#8b5cf6'],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '68%',
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#475569', padding: 16, font: { size: 12 }, usePointStyle: true, pointStyleWidth: 8 } }
+            }
+        }
+    });
+</script>
+}

@@ -1,0 +1,30 @@
+@model List<LoginLog>
+@{
+    ViewData["Title"] = "Login Logs";
+}
+
+<div class="card">
+    <div class="card-header"><h3>Recent Login Activity</h3></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr><th>Time</th><th>Email</th><th>User</th><th>Status</th><th>IP Address</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>@log.Timestamp.ToString("MMM dd, HH:mm:ss")</td>
+                        <td>@log.Email</td>
+                        <td>@(log.User?.FullName ?? "—")</td>
+                        <td>
+                            @if (log.IsSuccessful) { <span class="badge badge-success">Success</span> }
+                            else { <span class="badge badge-danger">Failed</span> }
+                        </td>
+                        <td>@(log.IpAddress ?? "—")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

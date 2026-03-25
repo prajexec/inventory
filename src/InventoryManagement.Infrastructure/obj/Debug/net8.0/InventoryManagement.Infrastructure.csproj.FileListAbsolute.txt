@@ -1,0 +1,17 @@
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/bin/Debug/net8.0/InventoryManagement.Infrastructure.deps.json
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/bin/Debug/net8.0/InventoryManagement.Infrastructure.runtimeconfig.json
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/bin/Debug/net8.0/InventoryManagement.Infrastructure.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/bin/Debug/net8.0/InventoryManagement.Infrastructure.pdb
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/bin/Debug/net8.0/InventoryManagement.Core.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/bin/Debug/net8.0/InventoryManagement.Core.pdb
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.csproj.AssemblyReference.cache
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.AssemblyInfoInputs.cache
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.AssemblyInfo.cs
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/Inventor.D66612EB.Up2Date
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/refint/InventoryManagement.Infrastructure.dll
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.pdb
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/InventoryManagement.Infrastructure.genruntimeconfig.cache
+/Users/priyanshu/Downloads/inventory/src/InventoryManagement.Infrastructure/obj/Debug/net8.0/ref/InventoryManagement.Infrastructure.dll

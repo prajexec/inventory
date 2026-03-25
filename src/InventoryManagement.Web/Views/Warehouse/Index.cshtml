@@ -1,0 +1,24 @@
+@model List<Warehouse>
+@{ ViewData["Title"] = "Warehouses"; }
+<div style="display:flex; justify-content:space-between; margin-bottom:24px;">
+    <p style="color:var(--text-muted);">Manage warehouse locations</p>
+    <a href="/Warehouse/Create" class="btn btn-primary">+ Add Warehouse</a>
+</div>
+<div class="card"><div class="table-container"><table>
+    <thead><tr><th>Name</th><th>Address</th><th>City</th><th>Manager</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+        @foreach (var w in Model)
+        {
+            <tr>
+                <td style="font-weight:600; color:var(--text-primary);">@w.Name</td>
+                <td>@(w.Address ?? "—")</td><td>@(w.City ?? "—")</td>
+                <td>@(w.Manager?.FullName ?? "—")</td><td>@(w.Phone ?? "—")</td>
+                <td>@(w.IsActive ? "Active" : "Inactive")</td>
+                <td class="actions-row">
+                    <a href="/Warehouse/Details/@w.Id" class="btn btn-secondary btn-sm">View</a>
+                    <a href="/Warehouse/Edit/@w.Id" class="btn btn-warning btn-sm">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table></div></div>

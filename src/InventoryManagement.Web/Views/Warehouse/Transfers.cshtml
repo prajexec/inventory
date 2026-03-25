@@ -1,0 +1,22 @@
+@model List<WarehouseTransfer>
+@{ ViewData["Title"] = "Warehouse Transfers"; }
+<div style="display:flex; justify-content:space-between; margin-bottom:24px;">
+    <p style="color:var(--text-muted);">Stock transfer history</p>
+    <a href="/Warehouse/Transfer" class="btn btn-primary">+ New Transfer</a>
+</div>
+<div class="card"><div class="table-container"><table>
+    <thead><tr><th>Transfer #</th><th>From</th><th>To</th><th>Items</th><th>Status</th><th>Date</th><th>By</th></tr></thead>
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td><code style="color:var(--primary-light);">@t.TransferNumber</code></td>
+                <td>@t.FromWarehouse.Name</td><td>@t.ToWarehouse.Name</td>
+                <td>@t.TransferItems.Count products (@t.TransferItems.Sum(ti => ti.Quantity) units)</td>
+                <td><span class="badge @(t.Status == TransferStatus.Completed ? "badge-success" : "badge-warning")">@t.Status</span></td>
+                <td>@t.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                <td>@t.CreatedBy.FullName</td>
+            </tr>
+        }
+    </tbody>
+</table></div></div>
