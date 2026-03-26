@@ -1,23 +1,25 @@
-# Inventory Management System — Walkthrough
+Inventory Management System — Walkthrough
 
 ## What Was Built
-A structured 3-tier ASP.NET Core 8.0 MVC application (Core, Infrastructure, Web) utilizing a SQLite database. It features cookie-based authentication with role-based policies and full CRUD operations for managing products, inventory, suppliers, sales orders, and purchase orders.
+A streamlined ASP.NET Core 8.0 MVC app utilizing a 3-tier architecture (Core, Infrastructure, Web) with 8 database tables, cookie authentication, and full CRUD operations for products, suppliers, and purchase orders.
 
 ## Project Structure
 ```text
 InventoryManagement/
 ├── src/
-│   ├── InventoryManagement.Core/        ← Domain Layer
-│   │   └── Models/                      ← Product, Inventory, Supplier, User, SalesOrder, etc.
+│   ├── InventoryManagement.Core/
+│   │   └── Models/              ← Product.cs, Supplier.cs, PurchaseOrder.cs, User.cs
 │   │
-│   ├── InventoryManagement.Infrastructure/ ← Data Access & Business Logic
-│   │   ├── Data/ApplicationDbContext.cs ← EF Core DbContext
-│   │   └── Services/                    ← ProductService, AuthService, SalesService, etc.
+│   ├── InventoryManagement.Infrastructure/
+│   │   ├── Data/
+│   │   │   └── ApplicationDbContext.cs ← EF Core DbContext, 8 DbSets, seeds admin & sample data
+│   │   └── Services/            ← ProductService.cs, SupplierService.cs, PurchaseService.cs, AuthService.cs
 │   │
-│   └── InventoryManagement.Web/         ← Presentation Layer
-│       ├── Controllers/                 ← AccountController, DashboardController, ProductController, etc.
-│       ├── Views/                       ← Razor views for all controllers
-│       └── Program.cs                   ← SQLite setup, Cookie Auth, DI container
+│   └── InventoryManagement.Web/
+│       ├── Controllers/         ← AccountController, DashboardController, ProductController, etc.
+│       ├── Views/               ← Razor views for all controllers (Shared, Account, Product, etc.)
+│       └── Program.cs           ← SQLite setup + cookie auth + DI configuration
+└── InventoryManagement.sln
 ```
 
 ## Key Concepts Covered
@@ -25,14 +27,15 @@ InventoryManagement/
 | Concept | Where |
 |---------|-------|
 | 3-Tier Architecture | `Core`, `Infrastructure`, `Web` projects |
-| Models & properties | `Product.cs`, `Inventory.cs`, `Supplier.cs`, etc. |
-| Foreign keys & navigation | e.g. `SalesOrder` relationships to `Product` and `User` |
-| EF Core DbContext & seed data | `ApplicationDbContext.cs` & `Program.cs` |
-| Dependency Injection (DI) | `Program.cs` (`AddScoped<ProductService>()`) |
-| Cookie authentication | `AccountController.cs` & `Program.cs` |
-| Role-based Policies | `Program.cs` (`RequireRole("Admin")`) |
-| BCrypt password hashing | `Program.cs` (admin seed) & auth logic |
-| MVC Pattern | All `Controllers/` and `Views/` |
+| Models & properties | `Product.cs`, `PurchaseOrder.cs`, `Supplier.cs` |
+| Foreign keys & navigation | `Product.CategoryId`, `PurchaseOrder.SupplierId` |
+| EF Core DbContext & seed data | `ApplicationDbContext.cs` |
+| `Include()`, `FirstOrDefaultAsync`, `SaveChangesAsync` | `ProductService.cs`, `PurchaseService.cs` |
+| Cookie authentication & Dependency Injection | `Program.cs` + `AccountController.cs` |
+| BCrypt password hashing | `AuthService.cs` + Admin seed in `Program.cs` |
+| `[Authorize]` attribute | Filtered access in all main Controllers |
+| GET/POST pattern | Every controller action (`Create`, `Edit`, `Delete`) |
+| Razor views + tag helpers | All `.cshtml` templates |
 
 ## How to Run
 
